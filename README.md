@@ -43,11 +43,12 @@ Lightweight foaming PLA expands during printing, producing parts at roughly half
 | Reference area | 219,160 mm² |
 | Mean aerodynamic chord (MAC) | 275.19 mm |
 | Wing aerodynamic centre | 245.51 mm |
-| First-flight CG range | 273–287 mm |
+| First-flight CG range | 273–287 mm, measured aft of the nose tip along the aircraft centreline |
 | Control surfaces | Elevons only |
 | Stabilizers | Dual fixed vertical fins (yaw stability + prop protection on belly landings) |
 | Propulsion | 2× A2807 1700 KV brushless, rear-mounted |
-| Battery | 6S 3000 mAh LiPo |
+| Propellers | 5″ and 7″ — both sizes to be flight-tested |
+| Battery | 6S 3000 mAh 45C LiPo (throttle limited to 70% — pack is over-spec for the motors) |
 | Flight controller | SpeedyBee F405 Wing |
 | Radio link | ExpressLRS (ELRS) |
 | Primary structure | Lightweight foaming PLA (LW-PLA) + carbon-fiber spars |
@@ -55,9 +56,9 @@ Lightweight foaming PLA expands during printing, producing parts at roughly half
 
 ---
 
-## Aerodynamic Analysis ✅
+## Aerodynamic & Performance Analysis ✅
 
-Two interactive analysis reports are published via GitHub Pages:
+Interactive analysis reports are published via GitHub Pages:
 
 ### 📊 [2D Aerodynamic Report — MH60 Airfoil (XFOIL)](https://morakah-hub.github.io/LWPLA-Aircraft/Calculations/2D_Aerodynamic_analysis_%28XFOIL%29.html)
 
@@ -82,6 +83,10 @@ Full-lifting-surface MAC derivation, aerodynamic centre location, and the first-
 
 *CG location verified in CAD using Onshape mass properties — the modeled centre of gravity is checked directly against the calculated 273–287 mm first-flight envelope before anything is printed.*
 
+### 🚀 [Thrust & Performance Estimation](https://morakah-hub.github.io/LWPLA-Aircraft/Calculations/performance_analysis.html) 🔜 *(coming soon)*
+
+Predicted flight envelope for the ~1.2 kg aircraft: static thrust and thrust-to-weight ratio for both the 5″ and 7″ propellers at the 70% throttle limit, plus estimated stall, launch, cruise, and maximum level speeds — each with the estimation method documented. Predictions will later be compared against thrust-stand measurements and blackbox flight data.
+
 ---
 
 ## Airframe & CAD ✅
@@ -104,32 +109,42 @@ The complete airframe is modeled for additive manufacturing, with the internal l
 
 **Design philosophy highlights:**
 - **LW-PLA everywhere possible** — foaming PLA cuts structural mass dramatically while allowing complex aerodynamic geometry on a consumer printer.
-- **Engineering plastics where it matters** — motor mounts and high-stress joints will be printed in stronger materials.
+- **Engineering plastics where it matters** — motor mounts and high-stress joints printed in stronger materials.
 - **Repairability as a feature** — any section of the aircraft can be reprinted in hours, which fundamentally changes the risk calculus for flight testing.
 
 ---
 
 ## Manufacturing 🔄 *(in progress)*
 
-Print-profile development and fabrication of the first airframe. LW-PLA is notoriously sensitive to temperature, flow rate, and foaming ratio, so this phase includes:
+Print-profile development and fabrication of the first airframe. LW-PLA is notoriously sensitive to temperature, flow rate, and foaming ratio, so calibration came first:
 
-- [ ] LW-PLA foaming calibration (flow %, temperature towers, density tuning)
-- [ ] Test prints of wing sections — surface quality vs. weight trade study
-- [ ] Spar integration and bonding method validation
-- [ ] Motor mount prints in engineering plastic
+- [x] LW-PLA foaming calibration (flow %, temperature towers, density tuning)
+- [x] Stabilizing fins printed, along with the structure that holds them ([photos in `/Manufacturing`](Manufacturing))
+- [x] Motor mounts printed in PETG
 - [ ] Full airframe print + assembly
-- [ ] **Weight & balance report** — as-built mass budget vs. design estimates, and final CG verification against the [calculated envelope](https://morakah-hub.github.io/LWPLA-Aircraft/Calculations/mac_analysis.html)
 
-📁 Documentation will live in [`/Manufacturing`](Manufacturing) — *coming soon.*
+📁 Print documentation and build photos live in [`/Manufacturing`](Manufacturing).
 
 ---
 
-## Avionics 🔜 *(coming soon)*
+## Avionics 🔄 *(hardware acquired — documentation coming soon)*
 
-Full documentation of the electronics architecture — treated as its own subsystem rather than an afterthought:
+All Version 1 electronics are in hand. The video feed routes through the F405's OSD so live telemetry (voltage, flight mode, RSSI, timer — GPS data in future versions) is overlaid in the FPV goggles.
 
-- **System wiring diagram** — SpeedyBee F405 Wing, dual ESCs, ELRS receiver, servos
-- **Power budget** — 6S main bus, regulated rails, and headroom reserved for the future companion computer (Raspberry Pi), GPS, airspeed sensor, and camera
+| Component | Model | Role |
+|---|---|---|
+| Flight controller | SpeedyBee F405 Wing | Stabilization, elevon mixer, OSD, future autonomy support |
+| ESC | 45A 4-in-1 | Drives both motors, provides 5V BEC to the FC |
+| Motors | 2× Anoel A2807 1700 KV | Twin rear pushers — throttle capped at 70% (6S is over-spec for these motors) |
+| Battery | 6S 3000 mAh 45C LiPo | Main power bus |
+| RC link | SuperP 14CH ELRS RX + Radiomaster Pocket TX | 2.4 GHz ExpressLRS, CRSF to the FC |
+| Servos | 2× MG90S metal gear | Left/right elevons |
+| FPV | RunCam Phoenix 2 SP → F405 OSD → Eachine TX805 5.8 GHz | Piloting view with telemetry overlay |
+
+**Documentation to come:**
+
+- **System wiring diagram** — full signal and video routing
+- **Power budget** — 6S main bus, BEC loads, and headroom reserved for the future companion computer (Raspberry Pi 5 on a dedicated 5A+ BEC), GPS (Matek M10Q-5883), and airspeed sensor (Matek ASPD-4525)
 - **Bench-test results** — servo/elevon calibration, motor direction and failsafe verification before the airframe ever leaves the ground
 
 📁 Diagrams and documentation will live in [`/Avionics`](Avionics) — *coming soon.*
@@ -160,9 +175,10 @@ Structured, incremental test campaign. Manual RC control remains the safety back
 | CAD design | ✅ Complete |
 | 2D aerodynamic analysis (XFOIL) | ✅ Complete |
 | MAC / CG / stability calculations | ✅ Complete |
+| LW-PLA print calibration | ✅ Complete |
+| Thrust & performance estimation report | 🔄 In progress |
 | 3D CFD analysis — will validate the full 3D flow field and directly inform design decisions for future versions | 🔜 Planned |
-| LW-PLA print calibration | 🔄 In progress |
-| Airframe manufacturing | 🔜 Planned |
+| Airframe manufacturing | 🔄 In progress |
 | Avionics integration & bench testing | 🔜 Planned |
 | Ground testing | 🔜 Planned |
 | First flight | 🔜 Planned |
@@ -183,7 +199,7 @@ Structured, incremental test campaign. Manual RC control remains the safety back
 LWPLA-Aircraft/
 ├── CAD/                  ✅ Airframe model, engineering drawing, rendered views
 ├── Calculations/         ✅ XFOIL 2D analysis + MAC/CG reports (GitHub Pages)
-├── Manufacturing/        🔄 Print profiles, build log, weight & balance
+├── Manufacturing/        🔄 Print calibration, fin & motor-mount prints, build photos
 ├── Avionics/             🔜 Wiring diagram, power budget, bench tests
 ├── Flight-Tests/         🔜 Test cards, blackbox logs, flight video
 ├── Images/               📷 Build and flight photography
