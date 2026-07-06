@@ -1,1 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thrust &amp; Performance Estimation — LW-PLA Delta UAV</title>
+<style>
+  :root{
+    --ink:#16181d;
+    --paper:#ffffff;
+    --dark:#0b0d10;
+    --dark-card:#101318;
+    --line-dark:#2a2f38;
+    --line-light:#e2e4e8;
+    --muted:#6b7280;
+    --muted-dark:#9aa3b2;
+    --accent:#4f8ef7;
+    --mono:"SF Mono","JetBrains Mono","Cascadia Code",Consolas,ui-monospace,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.65;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px;}
 
+  /* ---------- Dark hero: title block and headline results ---------- */
+  .hero{background:var(--dark);color:#fff;padding:72px 0 64px;}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--accent);text-transform:uppercase;margin-bottom:18px;}
+  .kicker span{color:var(--muted-dark);}
+  h1{font-size:clamp(30px,5vw,44px);font-weight:700;letter-spacing:-.01em;margin-bottom:12px;}
+  .sub{color:var(--muted-dark);font-size:17px;max-width:680px;}
+  .prelim{display:inline-block;margin-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#e8b34b;border:1px solid #4a3d1f;padding:6px 12px;border-radius:3px;}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line-dark);margin-top:40px;}
+  .stat{padding:26px 22px;border-right:1px solid var(--line-dark);background:var(--dark-card);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:var(--mono);font-size:26px;font-weight:600;color:#fff;white-space:nowrap;}
+  .stat .num small{font-size:12px;color:var(--muted-dark);font-weight:400;margin-left:4px;}
+  .stat .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-dark);margin-top:10px;}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr);}.stat:nth-child(2){border-right:none;}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line-dark);}}
+
+  /* ---------- Light body: numbered analysis sections ---------- */
+  section{padding:56px 0 8px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line-light);padding-bottom:12px;margin-bottom:24px;}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--accent);}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.005em;}
+  p{margin-bottom:16px;max-width:760px;}
+  p b{font-weight:650;}
+  .note{border-left:3px solid var(--accent);background:#f4f7fd;padding:16px 20px;margin:20px 0;max-width:760px;font-size:15px;}
+  .note .tag{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px;}
+  .warn{border-left-color:#d9a441;background:#fdf9f0;}
+  .warn .tag{color:#b07f1e;}
+
+  table{border-collapse:collapse;width:100%;max-width:820px;margin:20px 0 28px;font-size:15px;}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:2px solid var(--ink);}
+  td{padding:11px 14px;border-bottom:1px solid var(--line-light);vertical-align:top;}
+  td.mono, .mono{font-family:var(--mono);font-size:14px;}
+  tr.hl td{background:#f4f7fd;font-weight:600;}
+
+  .formula{font-family:var(--mono);font-size:15px;background:#f6f7f9;border:1px solid var(--line-light);padding:16px 20px;margin:18px 0;max-width:760px;overflow-x:auto;white-space:pre;}
+  .formula .c{color:var(--muted);}
+
+  footer{margin-top:64px;background:var(--dark);color:var(--muted-dark);padding:40px 0;font-size:14px;}
+  footer a{color:var(--accent);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+  .footlinks{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;line-height:2.1;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">Preliminary Design Analysis <span>·</span> Performance &amp; Propulsion <span>·</span> Thrust Estimation</div>
+    <h1>Thrust &amp; Performance Estimation</h1>
+    <p class="sub">Preliminary estimates of static thrust, thrust-to-weight ratio, and the flight-speed envelope for the LW-PLA delta UAV, evaluated for both 5″ and 7″ propellers under the imposed 70% throttle limit. All results are analytical predictions pending experimental validation.</p>
+    <div class="prelim">Preliminary — predictions to be validated by thrust-stand &amp; flight-test data</div>
+
+    <div class="stats">
+      <div class="stat"><div class="num">2.0–2.5</div><div class="lbl">Est. thrust-to-weight · 7″ prop</div></div>
+      <div class="stat"><div class="num">1.5–1.8</div><div class="lbl">Est. thrust-to-weight · 5″ prop</div></div>
+      <div class="stat"><div class="num">14–16 <small>m/s</small></div><div class="lbl">Estimated cruise speed</div></div>
+      <div class="stat"><div class="num">1.20 <small>kg</small></div><div class="lbl">Nominal AUW (assumed)</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- Section 01: Scope, data classification, mass budget, and operating assumptions.
+     All downstream calculations depend on the values established here. -->
+<section>
+  <div class="sec-head"><span class="sec-num">01</span><h2>Scope, assumptions &amp; mass budget</h2></div>
+
+  <p><b>Scope.</b> This report establishes a first-order performance prediction for the Version 1 aircraft prior to fabrication. It covers static thrust, thrust-to-weight ratio, and the principal reference speeds (stall, launch, cruise, and maximum level flight). Dynamic stability, control response, and endurance are outside the scope of this analysis and will be addressed in later work.</p>
+
+  <p>Throughout this report, values are classified as <b>measured</b> (weighed or recorded directly), <b>calculated</b> (derived from geometry or physical relations), <b>estimated</b> (based on published data for comparable hardware), or <b>assumed</b> (engineering judgment pending validation). The distinction is maintained in every table.</p>
+
+  <p>Atmospheric conditions are assumed to be standard sea level (ρ = 1.225 kg/m³, ν = 1.46×10⁻⁵ m²/s). Reference geometry is taken from the CAD model and the <a href="mac_analysis.html">MAC analysis</a>: wing reference area S = 219,160 mm² (0.219 m²), mean aerodynamic chord MAC = 275.19 mm, span b = 850 mm.</p>
+
+  <table>
+    <tr><th>Mass item</th><th>Value</th><th>Classification</th></tr>
+    <tr><td>Battery — 6S 3000 mAh 45C LiPo</td><td class="mono">366 g</td><td>Measured</td></tr>
+    <tr><td>LW-PLA airframe (incl. spars, fins)</td><td class="mono">≤ 500 g</td><td>Estimated — CAD mass properties with calibrated LW-PLA density; treated as an upper bound</td></tr>
+    <tr><td>Electronics &amp; hardware (motors, ESC, FC, servos, FPV, wiring, fasteners)</td><td class="mono">≤ 400 g</td><td>Estimated — component datasheets; treated as an upper bound</td></tr>
+    <tr class="hl"><td>All-up weight (AUW)</td><td class="mono">1.20 kg nominal · 1.27 kg worst case</td><td>Assumed — W = 11.8 N used throughout</td></tr>
+  </table>
+
+  <p>The itemized upper bounds sum to 1.27 kg; a nominal AUW of 1.20 kg (W = 11.8 N) is adopted for all subsequent calculations. Because the reference speeds derived in §04 scale with √W, adopting the worst-case mass instead would increase each speed by less than 3% — within the uncertainty of the other assumptions. The nominal value will be replaced by the as-built weight at the pre-flight weigh-in.</p>
+
+  <div class="note warn">
+    <span class="tag">Operating constraint — 70% throttle limit</span>
+    The 6S battery supplies a higher voltage than the A2807 1700 KV motors require for the selected propeller sizes. At full 6S voltage, motor speed and ESC current would exceed the intended operating range. A 70% throttle ceiling is therefore imposed in the flight-controller configuration, and <b>all thrust and speed figures in this report are computed at that ceiling</b>, not at full throttle. This constraint will be re-evaluated once thrust-stand current measurements are available.
+  </div>
+</section>
+
+<!-- Section 02: Static thrust estimation.
+     Basis: published thrust-stand data for the 2807 motor class, scaled to the
+     70% throttle cap using the constant-thrust-coefficient propeller relation. -->
+<section>
+  <div class="sec-head"><span class="sec-num">02</span><h2>Static thrust estimation</h2></div>
+
+  <p>At the time of writing, no thrust-stand data exist for these specific motor and propeller combinations. Static thrust is therefore estimated from published thrust-stand data for the 2807 motor class at comparable propeller loadings, scaled down to the 70% throttle ceiling.</p>
+
+  <p>The scaling follows from standard propeller theory. Static thrust obeys T = C<sub>T</sub>·ρ·n²·D⁴, where n is rotational speed and C<sub>T</sub> is the thrust coefficient. Treating C<sub>T</sub> as approximately constant over the throttle range — a first-order assumption, since C<sub>T</sub> varies weakly with Reynolds number and blade loading — thrust scales with the square of rotational speed. For a brushless motor under ESC control, rotational speed is approximately proportional to effective voltage, and effective voltage is approximately proportional to throttle command:</p>
+
+  <div class="formula">T = C_T · ρ · n² · D⁴          <span class="c">// propeller thrust relation, C_T ≈ const. (assumed)</span>
+n ∝ V_eff ∝ throttle           <span class="c">// BLDC first-order approximation</span>
+
+∴  T(70%) ≈ T(100%) × (0.70)² ≈ 0.49 × T(100%)</div>
+
+  <table>
+    <tr><th>Propeller</th><th>Full-throttle thrust, per motor (class data)</th><th>At 70% ceiling, per motor</th><th>Total, 2 motors</th></tr>
+    <tr><td>7″</td><td class="mono">~2.5–3.0 kgf</td><td class="mono">~1.2–1.5 kgf (12–15 N)</td><td class="mono">~2.4–3.0 kgf (24–29 N)</td></tr>
+    <tr><td>5″</td><td class="mono">~1.8–2.2 kgf</td><td class="mono">~0.9–1.1 kgf (9–11 N)</td><td class="mono">~1.8–2.2 kgf (18–22 N)</td></tr>
+  </table>
+
+  <div class="note">
+    <span class="tag">Uncertainty</span>
+    Class-typical data are not a substitute for measurements of these specific motors with these specific propellers. Manufacturing variation, propeller selection within each diameter, and the constant-C<sub>T</sub> assumption introduce a combined uncertainty estimated at ±15–20%. The ranges above should be read as preliminary bounds; the thrust-stand campaign planned for the Manufacturing phase will replace them with measured values.
+  </div>
+</section>
+
+<!-- Section 03: Thrust-to-weight ratio and its operational significance
+     for the hand-launch procedure. -->
+<section>
+  <div class="sec-head"><span class="sec-num">03</span><h2>Thrust-to-weight ratio</h2></div>
+
+  <p>Thrust-to-weight ratio is computed as total estimated static thrust divided by the nominal all-up weight:</p>
+
+  <div class="formula">T/W = T_total / W_AUW          <span class="c">// W_AUW = 1.20 kg (nominal, assumed)</span>
+
+7″ prop:   2.4–3.0 kgf / 1.20 kg  =  <b>2.0 – 2.5</b>
+5″ prop:   1.8–2.2 kgf / 1.20 kg  =  <b>1.5 – 1.8</b></div>
+
+  <p>These ratios are most significant during the hand-launch phase. A hand launch is assumed to impart an initial velocity of approximately 6–8 m/s — below the estimated stall speed of §04 — so the aircraft must accelerate through stall to flying speed on thrust alone. Preliminary estimates indicate that with T/W in the range computed above, this acceleration occurs within a few seconds, providing substantial margin for the launch procedure.</p>
+
+  <p>A static T/W greater than unity also implies, in principle, the capability for a brief vertical climb. In practice this capability is reduced by the decay of propeller thrust with forward airspeed, battery voltage sag under load, and propeller efficiency losses at low advance ratio; it should be interpreted as a margin indicator rather than a sustained-performance claim.</p>
+</section>
+
+<!-- Section 04: Reference speed estimates.
+     Stall and cruise from the level-flight lift equation; launch from the
+     standard 1.2 Vs margin; maximum level speed from the propeller
+     pitch-speed method. -->
+<section>
+  <div class="sec-head"><span class="sec-num">04</span><h2>Reference speed estimates</h2></div>
+
+  <p><b>Stall speed.</b> Stall speed is calculated from the level-flight lift equation, L = W = ½ρV²S·C<sub>L</sub>, solved for velocity at maximum lift coefficient. The lift equation is applicable because stall is defined at 1-g level flight. The two-dimensional section C<sub>L,max</sub> of 1.22 (from the <a href="2D_Aerodynamic_analysis_(XFOIL).html">XFOIL study</a>, Re = 400k, Ncrit = 9) is derated to an assumed aircraft value of C<sub>L,max</sub> ≈ 0.9. Two effects motivate the derating, consistent with classical finite-wing (lifting-line) theory and tailless-aircraft design practice: the wing is a finite surface of low aspect ratio (AR = b²/S ≈ 3.3), which reduces the attainable lift relative to the 2D section, and a tailless configuration must carry up-elevon (reflex) trim near stall, which further reduces usable lift. The derated value is an engineering assumption to be verified by glide testing.</p>
+
+  <div class="formula">V_stall = √( 2W / (ρ · S · C_Lmax) )
+        = √( 2 × 11.8 / (1.225 × 0.219 × 0.9) )
+        ≈ <b>9.9 m/s   (~36 km/h)</b>      <span class="c">// calculated, from assumed C_Lmax</span></div>
+
+  <p><b>Launch / takeoff speed.</b> The target speed immediately after launch applies the conventional 20% margin above stall used for takeoff safety speeds:</p>
+
+  <div class="formula">V_launch = 1.2 × V_stall ≈ <b>12 m/s   (~43 km/h)</b></div>
+
+  <p><b>Cruise speed.</b> Cruise is defined here as flight at the lift coefficient for best lift-to-drag ratio. The XFOIL polars place the section's best L/D near α = 6°; accounting for the finite-wing reduction in lift-curve slope at AR ≈ 3.3, the corresponding trimmed aircraft lift coefficient is estimated at C<sub>L</sub> ≈ 0.35–0.45. Solving the lift equation across this band:</p>
+
+  <div class="formula">V_cruise = √( 2W / (ρ · S · C_L,cruise) )
+         = √( 2 × 11.8 / (1.225 × 0.219 × [0.35–0.45]) )
+         ≈ <b>14–16 m/s   (50–58 km/h)</b></div>
+
+  <p><b>Maximum level speed.</b> Maximum speed is estimated by the propeller pitch-speed method, a standard first-order technique for small propeller-driven aircraft. Pitch speed — the theoretical advance speed at which the blade angle of attack, and therefore thrust, approaches zero — is evaluated at the loaded rotational speed under the 70% throttle ceiling, then reduced by an empirical factor of 0.75–0.85 to account for the airframe drag that balances thrust before pitch speed is reached. The loaded-speed factor k<sub>load</sub> ≈ 0.8–0.9 represents the typical reduction of a loaded outrunner below its no-load speed and is an assumption pending tachometer measurement.</p>
+
+  <div class="formula">n_loaded ≈ KV × V_batt × throttle × k_load     <span class="c">// k_load ≈ 0.8–0.9 (assumed)</span>
+V_pitch  = (n / 60) × prop_pitch
+V_max    ≈ (0.75–0.85) × V_pitch               <span class="c">// drag-limited, empirical factor</span>
+
+7″ prop (higher disc loading, lower n):  V_max ≈ <b>30–35 m/s  (110–125 km/h)</b>
+5″ prop (lower disc loading, higher n):  V_max ≈ <b>32–36 m/s  (115–130 km/h)</b></div>
+
+  <table>
+    <tr><th>Speed</th><th>Estimate</th><th>Method &amp; classification</th></tr>
+    <tr><td>Stall</td><td class="mono">~9.9 m/s (~36 km/h)</td><td>Calculated — lift equation at assumed C<sub>L,max</sub> ≈ 0.9 (derated from 2D value of 1.22)</td></tr>
+    <tr><td>Launch / takeoff</td><td class="mono">~12 m/s (~43 km/h)</td><td>Calculated — 1.2 × V<sub>stall</sub>, conventional margin</td></tr>
+    <tr><td>Cruise</td><td class="mono">14–16 m/s (50–58 km/h)</td><td>Calculated — lift equation at estimated best-L/D C<sub>L</sub> ≈ 0.35–0.45</td></tr>
+    <tr><td>Max level — 7″</td><td class="mono">30–35 m/s (110–125 km/h)</td><td>Estimated — pitch-speed method at 70% throttle</td></tr>
+    <tr><td>Max level — 5″</td><td class="mono">32–36 m/s (115–130 km/h)</td><td>Estimated — pitch-speed method at 70% throttle</td></tr>
+  </table>
+
+  <div class="note">
+    <span class="tag">Rationale for testing two propellers</span>
+    The 7″ propeller provides greater static thrust at lower rotational speed, favoring the launch and climb phases; the 5″ propeller reaches higher rotational and pitch speeds, favoring maximum level speed at reduced launch authority. Flight-testing both bounds the performance envelope from two directions and provides a propeller-selection dataset for the Version 2 design.
+  </div>
+</section>
+
+<!-- Section 05: Cross-check between the independently derived speed estimates
+     and the Reynolds numbers selected for the 2D XFOIL study. -->
+<section>
+  <div class="sec-head"><span class="sec-num">05</span><h2>Consistency with the 2D analysis</h2></div>
+  <p>The Reynolds numbers selected for the XFOIL polar study were chosen to represent the anticipated flight regimes. Converting each back to airspeed at the aircraft's MAC (Re = V·MAC/ν, MAC = 0.275 m) shows that the three analysis cases correspond closely to the speed estimates derived independently in §04:</p>
+
+  <table>
+    <tr><th>XFOIL case</th><th>Implied airspeed</th><th>Corresponding regime</th></tr>
+    <tr><td class="mono">Re = 200,000</td><td class="mono">~10.6 m/s</td><td>Stall / launch (est. ~10–12 m/s)</td></tr>
+    <tr><td class="mono">Re = 300,000</td><td class="mono">~15.9 m/s</td><td>Cruise (est. 14–16 m/s)</td></tr>
+    <tr><td class="mono">Re = 400,000</td><td class="mono">~21.2 m/s</td><td>High-speed flight, approaching V<sub>max</sub></td></tr>
+  </table>
+
+  <p>The 2D aerodynamic study and the present performance estimate therefore describe the same flight envelope by independent methods. This agreement does not validate either analysis experimentally, but it provides a useful cross-check that neither contains a gross inconsistency.</p>
+</section>
+
+<!-- Section 06: Validation plan. Each prediction is mapped to the test
+     that will confirm or correct it; the measured column is populated
+     as data become available. -->
+<section>
+  <div class="sec-head"><span class="sec-num">06</span><h2>Limitations &amp; validation plan</h2></div>
+
+  <p>The principal limitations of this analysis are: reliance on class-typical rather than measured thrust data (§02); the assumed constant thrust coefficient in the throttle-scaling relation (§02); the assumed aircraft C<sub>L,max</sub> and cruise C<sub>L</sub>, which carry the finite-wing and trim corrections as engineering estimates rather than computed values (§04); and the empirical factors in the pitch-speed method (§04). A future 3D CFD analysis and the test phases below are intended to retire these limitations in order.</p>
+
+  <table>
+    <tr><th>Prediction</th><th>Validated by</th><th>Measured value</th></tr>
+    <tr><td>Static thrust, both propellers (§02)</td><td>Thrust-stand tests — Manufacturing phase</td><td class="mono">— pending —</td></tr>
+    <tr><td>All-up weight &amp; CG location (§01)</td><td>As-built weigh-in prior to first flight</td><td class="mono">— pending —</td></tr>
+    <tr><td>Stall &amp; launch speed (§04)</td><td>Glide tests &amp; first-flight blackbox log</td><td class="mono">— pending —</td></tr>
+    <tr><td>Cruise &amp; maximum speed (§04)</td><td>Envelope-expansion flights, blackbox + GPS (future)</td><td class="mono">— pending —</td></tr>
+  </table>
+
+  <p>This document will be revised as measured values become available, converting it from a prediction report into a predicted-versus-measured comparison.</p>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footlinks">
+      LW-PLA Delta UAV — Version 1<br>
+      <a href="2D_Aerodynamic_analysis_(XFOIL).html">2D Aerodynamic Report (XFOIL)</a> ·
+      <a href="mac_analysis.html">Wing MAC &amp; Aerodynamic Centre</a> ·
+      <a href="https://github.com/morakah-hub/LWPLA-Aircraft">Project repository</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
