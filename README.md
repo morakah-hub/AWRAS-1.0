@@ -83,7 +83,7 @@ Full-lifting-surface MAC derivation, aerodynamic centre location, and the first-
 
 *CG location verified in CAD using Onshape mass properties — the modeled centre of gravity is checked directly against the calculated 273–287 mm first-flight envelope before anything is printed.*
 
-### 🚀 [Thrust & Performance Estimation](https://morakah-hub.github.io/LWPLA-Aircraft/Calculations/performance_analysis.html) 🔜 *(coming soon)*
+### 🚀 [Thrust & Performance Estimation](https://morakah-hub.github.io/LWPLA-Aircraft/Calculations/performance_analysis.html)
 
 Predicted flight envelope for the ~1.2 kg aircraft: static thrust and thrust-to-weight ratio for both the 5″ and 7″ propellers at the 70% throttle limit, plus estimated stall, launch, cruise, and maximum level speeds — each with the estimation method documented. Predictions will later be compared against thrust-stand measurements and blackbox flight data.
 
@@ -176,7 +176,7 @@ Structured, incremental test campaign. Manual RC control remains the safety back
 | 2D aerodynamic analysis (XFOIL) | ✅ Complete |
 | MAC / CG / stability calculations | ✅ Complete |
 | LW-PLA print calibration | ✅ Complete |
-| Thrust & performance estimation report | 🔄 In progress |
+| Thrust & performance estimation report | ✅ Complete |
 | 3D CFD analysis — will validate the full 3D flow field and directly inform design decisions for future versions | 🔜 Planned |
 | Airframe manufacturing | 🔄 In progress |
 | Avionics integration & bench testing | 🔜 Planned |
