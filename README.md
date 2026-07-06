@@ -22,6 +22,12 @@ The long-term goal: a compact, fast, rapidly manufacturable UAV that serves as a
 
 ---
 
+## Why LW-PLA?
+
+Lightweight foaming PLA expands during printing, producing parts at roughly half the density of standard PLA — light enough for a flying airframe while still printable on a consumer machine. It allows complex aerodynamic geometry that would be impractical to build from foam board or costly in composites, and any damaged section can be reprinted in hours for pennies. For an iterative test platform, that trade — some stiffness (recovered with carbon-fiber spars) in exchange for weight, geometric freedom, and near-instant repairability — is exactly the right one.
+
+---
+
 ## Design at a Glance
 
 <p align="center">
