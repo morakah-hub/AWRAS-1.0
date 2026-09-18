@@ -12,7 +12,9 @@
 
 ## Where this sits
 
-AWRAS 1.0 is the design and the analysis. **It was never built exactly as documented here** — the fuselage was made roomier before anything was printed, and that change carried into both aircraft that were actually built.
+AWRAS 1.0 was meant to fly. It never got built — the fuselage wasn't big enough for the electronics, so the design was revised and that revision became 1.1.
+
+What's left here is the design and all the analysis behind it, and that still stands for the whole series.
 
 The built airframes have their own repos: **[AWRAS 1.1](https://github.com/morakah-hub/AWRAS-1.1)** and **[AWRAS 1.2](https://github.com/morakah-hub/AWRAS-1.2)**.
 
@@ -20,7 +22,7 @@ The built airframes have their own repos: **[AWRAS 1.1](https://github.com/morak
 
 **[1.2](https://github.com/morakah-hub/AWRAS-1.2)** is the current aircraft, reprinted here with the lower fuselage half in PLA Pro. It's the one that will actually fly. More on each in its own repo.
 
-Everything in this repo — the airfoil study, the MAC and CG work, the performance estimates, the avionics selection — applies to the whole AWRAS 1 series. That's why it stays as its own repo rather than being folded into a build log.
+The geometry changes between 1.0, 1.1 and 1.2 are small, so the airfoil study, the MAC and CG work, and the performance estimates carry over. They haven't been re-run for the later versions. That may happen later — right now the priority is getting one in the air.
 
 ---
 
