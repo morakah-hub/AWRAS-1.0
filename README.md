@@ -14,11 +14,11 @@
 
 AWRAS 1.0 is the design and the analysis. **It was never built exactly as documented here** — the fuselage was made roomier before anything was printed, and that change carried into both aircraft that were actually built.
 
-The built airframes live in **[AWRAS 1.1 & 1.2](https://github.com/morakah-hub/AWRAS-1.1-1.2)**.
+The built airframes have their own repos: **[AWRAS 1.1](https://github.com/morakah-hub/AWRAS-1.1)** and **[AWRAS 1.2](https://github.com/morakah-hub/AWRAS-1.2)**.
 
-**1.1** was printed and wired in Qatar and was ready to fly, but it never did — it came together too late, and flying it would have needed clearance I couldn't get before I left. The airframe stayed in Qatar; the electronics came back with me.
+**[1.1](https://github.com/morakah-hub/AWRAS-1.1)** was printed and wired in Qatar and was ready to fly, but it never did — it came together too late, and flying it would have needed clearance I couldn't get before I left. The airframe stayed in Qatar; the electronics came back with me.
 
-**1.2** is the current aircraft, reprinted here with the lower fuselage half in PLA Pro. It's the one that will actually fly. More on both in that repo.
+**[1.2](https://github.com/morakah-hub/AWRAS-1.2)** is the current aircraft, reprinted here with the lower fuselage half in PLA Pro. It's the one that will actually fly. More on each in its own repo.
 
 Everything in this repo — the airfoil study, the MAC and CG work, the performance estimates, the avionics selection — applies to the whole AWRAS 1 series. That's why it stays as its own repo rather than being folded into a build log.
 
@@ -136,7 +136,7 @@ Full engineering drawing: [`CAD/Drawing.pdf`](CAD/Drawing.pdf)
 | Wiring diagram & power budget | 🔜 Planned |
 | 3D CFD analysis | 🔜 Planned |
 
-Manufacturing, assembly, and flight testing are tracked in [AWRAS 1.1 & 1.2](https://github.com/morakah-hub/AWRAS-1.1-1.2).
+Manufacturing, assembly, and flight testing are tracked in [AWRAS 1.1](https://github.com/morakah-hub/AWRAS-1.1) and [AWRAS 1.2](https://github.com/morakah-hub/AWRAS-1.2).
 
 ---
 
